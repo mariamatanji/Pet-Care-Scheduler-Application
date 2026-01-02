@@ -1,134 +1,197 @@
-
 import java.io.*;
 import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+
+
 
 public class PetCareScheduler {
 
+    private static List<Pet> pets = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
-    private static Map<String, Pet> Pet = new HashMap<>();
+
     public static void main(String[] args) {
         boolean running = true;
+
+        
+        loadPetFromFile();
+
         while (running) {
             System.out.println("\n=== Pet Care Scheduler ===");
             System.out.println("1. Register Pet");
-            System.out.println("2. Schedule Appointment ");
-            System.out.println("3. Store Data");
-            System.out.println("4. Display records");
-            System.out.println("5. Generate records");
+            System.out.println("2. Schedule Appointment");
+            System.out.println("3. Display Records");
+            System.out.println("4. Save and Exit");
+            System.out.println("5. Generate Report");
 
-            System.out.println("6. Save and Exit");
+
             System.out.print("Choose an option: ");
-
             String choice = scanner.nextLine();
 
-            loadPetFromFile();
-            
-                 switch (choice) {
-                    case "1":
-                        RegisterPet();
-                        break;
-                    case "2":
-                       // ScheduleAppointment();
-                        break;
-                    case "3":
-                        //StoreData();
-                        break;
-                    case "4":
-                       // DisplayRecords();
-                        break;
-                    case "5":
-                       // GenerateRecords();
-                        break;
-                    case "6":
-                        //savePetToFile();
-                        running = false;
-                        System.out.println("Data saved. Goodbye!");
-                        break;
-                    default:
-                    System.out.println("Invalid choice. Please select 1-6.");
-                }
-            
+            switch (choice) {
+                case "1":
+                    registerPet();
+                    break;
+                case "2":
+                    scheduleAppointment();
+                    break;
+                case "3":
+                    displayRecords();
+                    break;
+                case "4":
+                    savePetToFile();
+                    running = false;
+                    System.out.println("Data saved. Goodbye!");
+                    break;
+                case "5":
+                    generateReport();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select 1-4.");
             }
         }
-        public static void loadPetFromFile() {
-    File file = new File("pets.txt");
-    if (!file.exists()) {
-        System.out.println("No saved data found.");
-        return;
     }
 
-    try (Scanner fileScanner = new Scanner(file)) {
-        while (fileScanner.hasNextLine()) {
-            String line = fileScanner.nextLine();
-            String[] data = line.split(","); // Assumes comma-separated data
+    // ================= Methods ===================
 
-            if (data.length == 6) {
-                String id = data[0];
-                String name = data[1];
-                String owner = data[2];
-                double age = Double.parseDouble(data[3]);
-                String breed = data[4];
-                String type = data[5];
-
-                // Create the pet and add it to your map
-                Pet loadedPet = new Pet(id, name, owner, age, breed, type);
-                Pet.put(id, loadedPet); 
-            }
-        }
-        System.out.println("Data loaded successfully.");
-    } catch (Exception e) {
-        System.out.println("Error loading file: " + e.getMessage());
-    }
-}
-        
-        //   RegisterPet()
-        private static void RegisterPet(){
+    private static void registerPet() {
         System.out.print("Enter Pet ID: ");
         String id = scanner.nextLine().trim();
-        
-             if (Pet.containsKey(id)) {
-                 System.out.println("Error: Household ID already exists.");
-                return;  
-            }
-        System.out.print("Enter Pet name: ");
-        String name = scanner.nextLine().trim();
-        
-        System.out.print("Enter Owner name: ");
-        String Ownername = scanner.nextLine().trim();
-        
-        System.out.print("Enter Pet age: ");
-        double age = Double.parseDouble(scanner.nextLine().trim());
-        
-        System.out.print("Enter Pet Species/breed: ");
-        String breed = scanner.nextLine().trim();
-        
-         System.out.print("Enter Pet type: ");
-        String type = scanner.nextLine().trim();
-        
-        Pet myPet = new Pet(id, name, Ownername, age, breed, type);
-        
-        Pet.put(id, myPet);
-       System.out.println("Pet registered successfully on " + myPet.getDate());
-       
-        }
-        
-//ScheduleAppointment()
 
-//StoreData()
- //DisplayRecords()
-// GenerateRecords()
- //saveHPetToFile()
-        
+        for (Pet p : pets) {
+            if (p.getPetId().equals(id)) {
+                System.out.println("Error: Pet ID already exists.");
+                return;
+            }
+        }
+
+        System.out.print("Enter Pet Name: ");
+        String name = scanner.nextLine().trim();
+
+        System.out.print("Enter Owner Name: ");
+        String ownerName = scanner.nextLine().trim();
+
+        System.out.print("Enter Pet Age: ");
+        int age = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.print("Enter Pet Species/Breed: ");
+        String speciesBreed = scanner.nextLine().trim();
+
+        System.out.print("Enter Contact Info: ");
+        String contactInfo = scanner.nextLine().trim();
+
+        Pet myPet = new Pet(id, name, speciesBreed, age, ownerName, contactInfo, LocalDate.now());
+        pets.add(myPet);
+
+        System.out.println("Pet registered successfully on " + myPet.getRegistrationDate());
     }
 
+    private static void scheduleAppointment() {
+        System.out.print("Enter Pet ID: ");
+        String id = scanner.nextLine().trim();
 
+        Pet selectedPet = null;
+        for (Pet p : pets) {
+            if (p.getPetId().equals(id)) {
+                selectedPet = p;
+                break;
+            }
+        }
 
+        if (selectedPet == null) {
+            System.out.println("Pet ID not found.");
+            return;
+        }
 
+        System.out.print("Enter appointment date (YYYY-MM-DD): ");
+        String dateInput = scanner.nextLine().trim();
 
+        System.out.print("Enter appointment time (HH:MM): ");
+        String timeInput = scanner.nextLine().trim();
 
+        System.out.print("Enter appointment type: ");
+        String type = scanner.nextLine().trim();
 
+        System.out.print("Enter notes (optional): ");
+        String notes = scanner.nextLine().trim();
 
+        // Parse date + time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+       // LocalDateTime dateTime = LocalDateTime.parse(dateInput + " " + timeInput, formatter);
+       LocalDateTime dateTime;
+        try {
+            dateTime = LocalDateTime.parse(dateInput + " " + timeInput, formatter);
+        } catch (Exception e) {
+            System.out.println("Invalid date/time format.");
+            return;
+    }
 
+        Appointment appt = new Appointment(dateTime, type, notes);
+        selectedPet.addAppointment(appt);
 
+        System.out.println("Appointment scheduled successfully for " + selectedPet.getName() +
+                " on " + dateTime.format(formatter));
+                
+                
+                
+    }
 
+    private static void displayRecords() {
+        if (pets.isEmpty()) {
+            System.out.println("No pets registered yet.");
+            return;
+        }
+
+        for (Pet p : pets) {
+            System.out.println(p.toString());
+            if (!p.getAppointments().isEmpty()) {
+                System.out.println("Appointments:");
+                for (Appointment a : p.getAppointments()) {
+                    System.out.println("  - " + a.toString());
+                }
+            } else {
+                System.out.println("No appointments yet.");
+            }
+            System.out.println("------------------------");
+        }
+    }
+    
+    private static void savePetToFile() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("pets.dat"))) {
+            out.writeObject(pets);
+            System.out.println("Data saved successfully!");
+        }catch (Exception e) {
+             System.out.println("Error saving data: " + e.getMessage());
+            }
+    }
+
+    private static void loadPetFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("pets.dat"))) {
+            pets = (List<Pet>) in.readObject();
+            System.out.println("Data loaded successfully!");
+        } catch (FileNotFoundException e) {
+            System.out.println("No previous data found. Starting fresh.");
+        } catch (Exception e) {
+        System.out.println("Error loading data: " + e.getMessage());
+        }
+    }
+    
+    private static void generateReport() {
+        if (pets.isEmpty()) {
+            System.out.println("No pets registered.");
+            return;
+        }
+
+        System.out.println("=== Pets Report ===");
+        for (Pet p : pets) {
+            System.out.println("Pet: " + p.getName() + " | Owner: " + p.getOwnerName() +
+                           " | Appointments: " + p.getAppointments().size());
+            for (Appointment a : p.getAppointments()) {
+            System.out.println("   - " + a.toString());
+            }
+        }
+        System.out.println("===================");
+    }
+
+}
