@@ -1,8 +1,9 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class Pet {
+public class Pet implements Serializable {
     private String petId;
     private String name;
     private String speciesBreed;
@@ -12,18 +13,18 @@ public class Pet {
     private LocalDate registrationDate;
     private List<Appointment>appointments;
 // constructor
-    public Pet(String petId, String name,  String speciesBreed,int age,String ownerName, String contactInfo){
+    public Pet(String petId, String name,  String speciesBreed,int age,String ownerName, String contactInfo,LocalDate registrationDate){
         this.petId = petId;
         this.name = name;
-        this.age = age;
-        this.speciesBreed = speciesBreed;
+        this.age = age; 
         this.ownerName = ownerName;
         this.contactInfo = contactInfo;
         this.registrationDate = registrationDate;
         this.appointments = new ArrayList<>();
     }
+    
   //Getters
-    public String getPetID(){
+    public String getPetId(){
         return petId;
     }
 
@@ -45,7 +46,7 @@ public class Pet {
     public LocalDate getRegistrationDate(){
         return registrationDate;
     }
-    public List<Appointment>getAppointment(){
+    public List<Appointment> getAppointments(){
         return appointments;
     }
 
@@ -69,10 +70,13 @@ public class Pet {
      public void setRegistrationDate(LocalDate registrationDate){
         this.registrationDate = registrationDate;
     }
-     public void setAppointments(List<Appointment> appointments){
-        this.appointments = appointments;
+     public void addAppointment(Appointment appointment){
+         
+        if(appointment != null){
+            appointments.add(appointment);
+        }
     }
-    @override
+    @Override
     public String toString(){
         return "Pet ID: " +petId+
             ", Name: "+name+
