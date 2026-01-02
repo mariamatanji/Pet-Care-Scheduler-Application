@@ -1,60 +1,87 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-
-
-
-/* Pet class with the following attributes:
-- Unique Pet ID
-- Name
-- Species/Breed
-- Age
-- Owner name
-- Contact Info
-- Registration date
-- List of appointments, using an appropriate collection object.*/
-
-import java.io.Serializable;
-import java.time.LocalDate;;
-
-public class Pet implements Serializable {
-    private String petID;
+public class Pet {
+    private String petId;
     private String name;
-    private String Species;
-    private double age;
-    private String OwnerName;
-    private String ContactInfo;
-    private LocalDate date;
-
-    public Pet(String petID, String name,  String Species,double age,String OwnerName, String ContactInfo){
-        this.petID = petID;
+    private String speciesBreed;
+    private int age;
+    private String ownerName;
+    private String contactInfo;
+    private LocalDate registrationDate;
+    private List<Appointment>appointments;
+// constructor
+    public Pet(String petId, String name,  String speciesBreed,int age,String ownerName, String contactInfo){
+        this.petId = petId;
         this.name = name;
         this.age = age;
-        this.Species = Species;
-        this.OwnerName = OwnerName;
-        this.ContactInfo = ContactInfo;
-        this.date = LocalDate.now();
+        this.speciesBreed = speciesBreed;
+        this.ownerName = ownerName;
+        this.contactInfo = contactInfo;
+        this.registrationDate = registrationDate;
+        this.appointments = new ArrayList<>();
     }
+  //Getters
     public String getPetID(){
-        return petID;
+        return petId;
     }
 
-    public String getname(){
+    public String getName(){
         return name;
     }
-    public double getage(){
+    public int getAge(){
         return age;
     }
-    public String getSpecies(){
-        return Species;
+    public String getSpeciesBreed(){
+        return speciesBreed;
     }
     public String getOwnerName(){
-        return OwnerName;
+        return ownerName;
     }
     public String getContactInfo(){
-        return ContactInfo;
+        return contactInfo;
     }
-    public LocalDate getDate(){
-        return date;
+    public LocalDate getRegistrationDate(){
+        return registrationDate;
+    }
+    public List<Appointment>getAppointment(){
+        return appointments;
     }
 
-    
+ // setters(excluding petId as it's unique not changebale)
+  
+    public void setName(String name){
+        this.name = name;
+    }
+     public void setAge(int age){
+        this.age = age;
+    }
+     public void setSpeciesBreed(String speciesBreed){
+        this.speciesBreed = speciesBreed;
+    }
+     public void setOwnerName(String ownerName){
+        this.ownerName = ownerName;
+    }
+     public void setContactInfo(String contactInfo){
+        this.contactInfo = contactInfo;
+    }
+     public void setRegistrationDate(LocalDate registrationDate){
+        this.registrationDate = registrationDate;
+    }
+     public void setAppointments(List<Appointment> appointments){
+        this.appointments = appointments;
+    }
+    @override
+    public String toString(){
+        return "Pet ID: " +petId+
+            ", Name: "+name+
+            ", Species/Breed: "+speciesBreed+
+            ", Age: " +age+
+            ", Owner: "+ ownerName+
+            ", Contact Info: "+contactInfo+
+            ", Registred "+ registrationDate+
+            ", Appointments "+appointments.size();
+    }
+     
 }    
