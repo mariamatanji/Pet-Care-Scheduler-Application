@@ -1,37 +1,49 @@
-import java.io.Serializable;
+import java.util.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class Appointment implements Serializable{
 
-    private LocalDateTime date;
-    private String Type;
+public class Appointment{
+
+    private LocalDateTime dateTime;
+    private String appointmentType;
     private String notes;
-    private List<Pet> appointment;
+    
+// constructor
+    public Appointment(LocalDateTime dateTime, String appointmentType,String notes){
 
-    public Appointment( String Type, String notes){
-
-        this.Type = Type;
+        this.dateTime = dateTime;
+        this.appointmentType = appointmentType;
         this.notes = notes;
-        this.date = LocalDateTime.now();
-        this.appointment = new ArrayList<>();
     }
-    public String getTypes(){
-        return Type;
+// Getters
+    public LocalDateTime getDateTime(){
+        return dateTime;
     
     }
-    public String getNotes(){
-        return notes;
+    public String getAppointmentType(){
+        return appointmentType;
     }
-    public List<Pet> getappointment() { 
-        return appointment; 
+    public String getNotes() { 
+        return notes; 
     }
-    public void addAppointment(Pet appointment){
-
-        this.appointment.add(appointment);
-        
+//setters
+    public void setDateTime(){
+        this.dateTime = dateTime ;
+    
     }
+    public void setAppointmentType(){
+        this.appointmentType = appointmentType ;
+    }
+    public void setNotes() { 
+        this.notes = notes; 
+    }
+@Override
+    public String toString(){
+        return "Appointment Type:" + appointmentType +
+            ", Date and Time: " + dateTime +
+            ", Notes: " +(notes!=null ? notes: "none");
+    }
+    
 
 }
